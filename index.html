@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedAxis — An Ultimate Medical Companion</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0a0f14;
+    --ink-2: #1c2b38;
+    --ink-3: #2e4558;
+    --mist: #f2f4f6;
+    --mist-2: #e8ecf0;
+    --accent: #1a5c8f;
+    --accent-2: #0e3d62;
+    --accent-bright: #2b8cbe;
+    --gold: #c8943a;
+    --gold-light: #e8b96a;
+    --danger: #b83232;
+    --safe: #1a7a4a;
+    --white: #ffffff;
+    --serif: 'DM Serif Display', serif;
+    --mono: 'DM Mono', monospace;
+    --sans: 'Outfit', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--white);
+    color: var(--ink);
+    overflow-x: hidden;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 3rem;
+    height: 64px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(10,15,20,0.07);
+  }
+
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+
+  .logo-mark {
+    width: 32px; height: 32px;
+    background: var(--ink);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .logo-mark svg { width: 18px; height: 18px; }
+
+  .logo-name {
+    font-family: var(--serif);
+    font-size: 20px;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px; font-weight: 400;
+    color: var(--ink-3);
+    text-decoration: none;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--ink); }
+
+  .nav-cta {
+    background: var(--ink);
+    color: var(--white) !important;
+    padding: 7px 18px;
+    border-radius: 6px;
+    font-size: 13px !important;
+    font-weight: 500 !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--accent) !important; }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 100px 3rem 60px;
+    gap: 4rem;
+    background: var(--white);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(26,92,143,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid rgba(26,92,143,0.25);
+    padding: 5px 12px;
+    border-radius: 4px;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.1s forwards;
+  }
+
+  .hero-eyebrow .dot {
+    width: 6px; height: 6px;
+    background: var(--accent-bright);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+
+  .hero-title {
+    font-family: var(--serif);
+    font-size: clamp(2.6rem, 4.5vw, 4rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.2s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--accent);
+  }
+
+  .hero-sub {
+    font-size: 16px;
+    font-weight: 300;
+    color: var(--ink-3);
+    line-height: 1.75;
+    max-width: 480px;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.3s forwards;
+  }
+
+  .hero-actions {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.4s forwards;
+  }
+
+  .btn-primary {
+    background: var(--ink);
+    color: var(--white);
+    padding: 13px 28px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none; cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    letter-spacing: 0.01em;
+  }
+
+  .btn-primary:hover { background: var(--accent); transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--ink);
+    padding: 13px 28px;
+    border-radius: 7px;
+    font-size: 14px;
+    font-weight: 400;
+    text-decoration: none;
+    border: 1px solid rgba(10,15,20,0.18);
+    cursor: pointer;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+
+  .btn-secondary:hover { border-color: var(--ink); transform: translateY(-1px); }
+
+  .tagline-strip {
+    margin-top: 3rem;
+    display: flex; align-items: center; gap: 10px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease 0.5s forwards;
+  }
+
+  .tagline-strip span {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    opacity: 0.6;
+  }
+
+  .tagline-strip .line { flex: 1; height: 1px; background: var(--mist-2); max-width: 40px; }
+
+  /* ── HERO INTERFACE MOCKUP ── */
+  .hero-visual {
+    opacity: 0;
+    animation: fadeIn 0.8s ease 0.5s forwards;
+    position: relative;
+  }
+
+  .interface-card {
+    background: var(--white);
+    border: 1px solid rgba(10,15,20,0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 40px rgba(10,15,20,0.1), 0 1px 4px rgba(10,15,20,0.06);
+  }
+
+  .interface-header {
+    background: var(--ink);
+    padding: 14px 20px;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .interface-dots { display: flex; gap: 6px; }
+  .interface-dots span { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+
+  .interface-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.08em;
+    margin-left: auto;
+  }
+
+  .interface-body { padding: 20px; background: var(--mist); min-height: 420px; }
+
+  .patient-banner {
+    background: var(--white);
+    border: 1px solid var(--mist-2);
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  .patient-avatar {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--ink-2);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono); font-size: 12px; color: var(--white);
+    flex-shrink: 0;
+  }
+
+  .patient-info p { font-size: 13px; font-weight: 500; color: var(--ink); margin: 0; }
+  .patient-info span { font-size: 11px; color: var(--ink-3); font-family: var(--mono); }
+
+  .patient-flags { margin-left: auto; display: flex; gap: 6px; }
+  .flag {
+    font-size: 10px; font-family: var(--mono);
+    padding: 3px 8px; border-radius: 4px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+  .flag-warn { background: #fef3e2; color: #8a5a00; border: 1px solid #e8c87a; }
+  .flag-alert { background: #fce8e8; color: #8a1a1a; border: 1px solid #e8a0a0; }
+
+  .chat-block { display: flex; flex-direction: column; gap: 10px; }
+
+  .msg {
+    padding: 11px 14px;
+    border-radius: 10px;
+    font-size: 13px;
+    line-height: 1.55;
+    max-width: 90%;
+  }
+
+  .msg-doc {
+    background: var(--ink);
+    color: rgba(255,255,255,0.9);
+    align-self: flex-end;
+    border-bottom-right-radius: 3px;
+  }
+
+  .msg-ai {
+    background: var(--white);
+    color: var(--ink);
+    border: 1px solid var(--mist-2);
+    align-self: flex-start;
+    border-bottom-left-radius: 3px;
+  }
+
+  .msg-sender {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    margin-bottom: 5px;
+    opacity: 0.55;
+  }
+
+  .dx-list { margin-top: 8px; display: flex; flex-direction: column; gap: 5px; }
+
+  .dx-item {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px;
+  }
+
+  .dx-bar-wrap {
+    flex: 1; height: 4px;
+    background: var(--mist); border-radius: 2px; overflow: hidden;
+  }
+
+  .dx-bar { height: 100%; border-radius: 2px; }
+  .dx-pct { font-family: var(--mono); font-size: 11px; color: var(--ink-3); min-width: 32px; text-align: right; }
+
+  .interface-input {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--white);
+    border: 1px solid var(--mist-2);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin-top: 12px;
+  }
+
+  .interface-input span {
+    font-size: 12px; color: var(--ink-3); flex: 1;
+    font-style: italic;
+  }
+
+  .input-btn {
+    width: 28px; height: 28px;
+    background: var(--ink);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .input-btn svg { width: 13px; height: 13px; }
+
+  /* ── STATS STRIP ── */
+  .stats-strip {
+    background: var(--ink);
+    padding: 2.5rem 3rem;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .stat { text-align: center; }
+
+  .stat-num {
+    font-family: var(--serif);
+    font-size: 2.4rem;
+    color: var(--white);
+    letter-spacing: -0.03em;
+    display: block;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-family: var(--mono);
+  }
+
+  .stat-accent { color: var(--gold-light); }
+
+  /* ── HOW IT WORKS ── */
+  .section {
+    padding: 7rem 3rem;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(2rem, 3.5vw, 2.8rem);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+
+  .section-sub {
+    font-size: 15px;
+    font-weight: 300;
+    color: var(--ink-3);
+    max-width: 520px;
+    line-height: 1.75;
+    margin-bottom: 3.5rem;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .step-card {
+    background: var(--mist);
+    border-radius: 12px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s;
+  }
+
+  .step-card:hover { transform: translateY(-3px); }
+
+  .step-num {
+    font-family: var(--serif);
+    font-size: 4rem;
+    color: rgba(10,15,20,0.06);
+    position: absolute;
+    top: -8px; right: 16px;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .step-icon {
+    width: 40px; height: 40px;
+    background: var(--ink);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .step-icon svg { width: 20px; height: 20px; stroke: white; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  .step-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--ink);
+    margin-bottom: 8px;
+    line-height: 1.3;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: var(--ink-3);
+    line-height: 1.65;
+  }
+
+  /* ── CAPABILITIES ── */
+  .cap-section {
+    background: var(--ink);
+    padding: 7rem 3rem;
+    color: var(--white);
+  }
+
+  .cap-section .section-label { color: var(--gold-light); }
+  .cap-section .section-title { color: var(--white); }
+  .cap-section .section-sub { color: rgba(255,255,255,0.5); }
+
+  .cap-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .cap-item {
+    background: var(--ink);
+    padding: 2rem;
+    transition: background 0.2s;
+  }
+
+  .cap-item:hover { background: var(--ink-2); }
+
+  .cap-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.2);
+    margin-bottom: 1rem;
+  }
+
+  .cap-title {
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--white);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .cap-desc {
+    font-size: 13px;
+    font-weight: 300;
+    color: rgba(255,255,255,0.45);
+    line-height: 1.65;
+  }
+
+  .cap-tag {
+    display: inline-block;
+    margin-top: 14px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.12);
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* ── TRUST SECTION ── */
+  .trust-section {
+    padding: 7rem 3rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+  }
+
+  .trust-list { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 2.5rem; }
+
+  .trust-item {
+    display: flex; gap: 16px; align-items: flex-start;
+    padding: 1.25rem;
+    border: 1px solid var(--mist-2);
+    border-radius: 10px;
+    transition: border-color 0.2s;
+  }
+
+  .trust-item:hover { border-color: rgba(26,92,143,0.25); }
+
+  .trust-icon {
+    width: 36px; height: 36px; flex-shrink: 0;
+    background: var(--mist);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .trust-icon svg { width: 18px; height: 18px; stroke: var(--accent); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  .trust-item-title { font-size: 14px; font-weight: 500; color: var(--ink); margin-bottom: 4px; }
+  .trust-item-desc { font-size: 13px; font-weight: 300; color: var(--ink-3); line-height: 1.6; }
+
+  .compliance-card {
+    background: var(--mist);
+    border-radius: 14px;
+    padding: 2rem;
+  }
+
+  .compliance-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 1.25rem;
+  }
+
+  .compliance-items { display: flex; flex-direction: column; gap: 10px; }
+
+  .comp-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    background: var(--white);
+    border-radius: 8px;
+    border: 1px solid var(--mist-2);
+    font-size: 13px; font-weight: 400;
+    color: var(--ink);
+  }
+
+  .comp-check {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: var(--safe);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .comp-check svg { width: 10px; height: 10px; stroke: white; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* ── CTA ── */
+  .cta-section {
+    padding: 7rem 3rem;
+    text-align: center;
+    background: var(--mist);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    width: 600px; height: 300px;
+    background: radial-gradient(ellipse, rgba(26,92,143,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .cta-title {
+    font-family: var(--serif);
+    font-size: clamp(2.2rem, 4vw, 3.2rem);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    line-height: 1.15;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .cta-sub {
+    font-size: 15px; font-weight: 300;
+    color: var(--ink-3);
+    max-width: 440px;
+    margin: 0 auto 2.5rem;
+    line-height: 1.75;
+    position: relative;
+  }
+
+  .cta-actions { display: flex; gap: 12px; justify-content: center; position: relative; }
+
+  /* ── FOOTER ── */
+  footer {
+    padding: 2rem 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border-top: 1px solid var(--mist-2);
+  }
+
+  .footer-brand {
+    font-family: var(--serif);
+    font-size: 16px;
+    color: var(--ink);
+  }
+
+  .footer-note {
+    font-size: 12px; font-weight: 300;
+    color: var(--ink-3);
+    font-family: var(--mono);
+  }
+
+  .footer-tagline {
+    font-size: 12px;
+    font-style: italic;
+    color: var(--ink-3);
+    opacity: 0.6;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; } to { opacity: 1; }
+  }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; padding: 100px 1.5rem 60px; }
+    .hero-visual { display: none; }
+    .steps-grid { grid-template-columns: 1fr 1fr; }
+    .cap-grid { grid-template-columns: 1fr; }
+    .trust-section { grid-template-columns: 1fr; }
+    .stats-strip { grid-template-columns: 1fr 1fr; }
+    nav { padding: 0 1.5rem; }
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 18 18" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round">
+        <path d="M9 2v4M9 12v4M2 9h4M12 9h4M4.5 4.5l2.5 2.5M11 11l2.5 2.5M4.5 13.5L7 11M11 7l2.5-2.5"/>
+        <circle cx="9" cy="9" r="2.5"/>
+      </svg>
+    </div>
+    <span class="logo-name">MedAxis</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#how">How it works</a></li>
+    <li><a href="#capabilities">Capabilities</a></li>
+    <li><a href="#trust">Trust & safety</a></li>
+    <li><a href="#" class="nav-cta">Request access</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-eyebrow">
+      <span class="dot"></span>
+      For practising medical professionals
+    </div>
+    <h1 class="hero-title">
+      Clinical reasoning,<br>
+      <em>amplified</em> by AI
+    </h1>
+    <p class="hero-sub">
+      MedAxis is a collaborative diagnostic companion — it thinks alongside you, surfacing differentials, mapping what can go wrong, and helping you reach the right answer faster.
+    </p>
+    <div class="hero-actions">
+      <a href="#" class="btn-primary">Request early access</a>
+      <a href="#how" class="btn-secondary">See how it works</a>
+    </div>
+    <div class="tagline-strip">
+      <span class="line"></span>
+      <span>An ultimate medical companion</span>
+      <span class="line"></span>
+    </div>
+  </div>
+
+  <!-- INTERFACE MOCKUP -->
+  <div class="hero-visual">
+    <div class="interface-card">
+      <div class="interface-header">
+        <div class="interface-dots">
+          <span class="dot-r"></span>
+          <span class="dot-y"></span>
+          <span class="dot-g"></span>
+        </div>
+        <span class="interface-title">MEDAXIS · ACTIVE SESSION</span>
+      </div>
+      <div class="interface-body">
+        <div class="patient-banner">
+          <div class="patient-avatar">M/54</div>
+          <div class="patient-info">
+            <p>Patient · Male, 54 yrs</p>
+            <span>HTN · T2DM · Active smoker</span>
+          </div>
+          <div class="patient-flags">
+            <span class="flag flag-alert">HIGH RISK</span>
+            <span class="flag flag-warn">URGENT</span>
+          </div>
+        </div>
+
+        <div class="chat-block">
+          <div class="msg msg-doc">
+            <div class="msg-sender">DR. ATTENDING</div>
+            Patient presents with 3-day progressive dyspnoea, orthopnoea, bilateral leg oedema. BP 168/102. SpO2 88% on room air. CXR shows bilateral infiltrates.
+          </div>
+
+          <div class="msg msg-ai">
+            <div class="msg-sender">MEDAXIS</div>
+            Based on the presentation, here are the ranked differentials:
+            <div class="dx-list">
+              <div class="dx-item">
+                <span style="font-size:12px;min-width:130px;color:#0a0f14">Acute pulmonary oedema</span>
+                <div class="dx-bar-wrap"><div class="dx-bar" style="width:82%;background:#1a5c8f"></div></div>
+                <span class="dx-pct">82%</span>
+              </div>
+              <div class="dx-item">
+                <span style="font-size:12px;min-width:130px;color:#0a0f14">Bilateral pneumonia</span>
+                <div class="dx-bar-wrap"><div class="dx-bar" style="width:11%;background:#6b9bb8"></div></div>
+                <span class="dx-pct">11%</span>
+              </div>
+              <div class="dx-item">
+                <span style="font-size:12px;min-width:130px;color:#0a0f14">ARDS</span>
+                <div class="dx-bar-wrap"><div class="dx-bar" style="width:7%;background:#a0bfcf"></div></div>
+                <span class="dx-pct">7%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="interface-input">
+          <span>What are the red flags I should watch for...</span>
+          <div class="input-btn">
+            <svg viewBox="0 0 13 13" stroke="white" stroke-width="1.5" stroke-linecap="round" fill="none">
+              <path d="M2 6.5h9M7.5 3L11 6.5 7.5 10"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip">
+  <div class="stat">
+    <span class="stat-num stat-accent">4,200+</span>
+    <span class="stat-label">Conditions mapped</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num stat-accent">All</span>
+    <span class="stat-label">Medical specialties</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num stat-accent">&lt;10s</span>
+    <span class="stat-label">Differential generated</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num stat-accent">Global</span>
+    <span class="stat-label">Clinical guidelines</span>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<section class="section" id="how">
+  <div class="section-label">How it works</div>
+  <h2 class="section-title">From presentation<br>to clarity, together</h2>
+  <p class="section-sub">MedAxis works the way you think — iteratively, in conversation, with the full clinical picture always in view.</p>
+
+  <div class="steps-grid">
+    <div class="step-card">
+      <span class="step-num">1</span>
+      <div class="step-icon">
+        <svg viewBox="0 0 20 20"><path d="M3 6h14M3 10h10M3 14h7"/><path d="M15 12l3 3-3 3"/></svg>
+      </div>
+      <div class="step-title">Present the case</div>
+      <p class="step-desc">Type or upload the patient's history, symptoms, vitals, and any available results — in your own words, no structured forms required.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">2</span>
+      <div class="step-icon">
+        <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="7"/><path d="M10 7v3l2 2"/></svg>
+      </div>
+      <div class="step-title">Get ranked differentials</div>
+      <p class="step-desc">MedAxis returns a prioritised differential list with probability estimates, clinical reasoning, and the evidence supporting each diagnosis.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">3</span>
+      <div class="step-icon">
+        <svg viewBox="0 0 20 20"><path d="M4 10h12M10 4l6 6-6 6"/></svg>
+      </div>
+      <div class="step-title">Explore and challenge</div>
+      <p class="step-desc">Ask follow-up questions. Add new data. Drill into complications, dangerous mimics, or treatment contraindications — the conversation refines the picture.</p>
+    </div>
+    <div class="step-card">
+      <span class="step-num">4</span>
+      <div class="step-icon">
+        <svg viewBox="0 0 20 20"><path d="M5 10l4 4 6-8"/><circle cx="10" cy="10" r="7"/></svg>
+      </div>
+      <div class="step-title">Act with confidence</div>
+      <p class="step-desc">Receive suggested investigations, treatment pathways, referral criteria, and red flags — all grounded in current clinical guidelines.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CAPABILITIES -->
+<section class="cap-section" id="capabilities">
+  <div class="section-label">Capabilities</div>
+  <h2 class="section-title" style="color:white">Built for the hardest<br>moments in medicine</h2>
+  <p class="section-sub">Not a lookup tool. A reasoning partner that matches the complexity of real clinical decisions.</p>
+
+  <div class="cap-grid">
+    <div class="cap-item">
+      <div class="cap-num">01</div>
+      <div class="cap-title">Differential diagnosis</div>
+      <p class="cap-desc">Ranked list of diagnoses with likelihood estimates, matched against clinical presentation and patient history.</p>
+      <span class="cap-tag">All specialties</span>
+    </div>
+    <div class="cap-item">
+      <div class="cap-num">02</div>
+      <div class="cap-title">Differentials on differentials</div>
+      <p class="cap-desc">If it's condition A — what else should you watch for? Recursive reasoning that maps second-order diagnoses and complications.</p>
+      <span class="cap-tag">Recursive reasoning</span>
+    </div>
+    <div class="cap-item">
+      <div class="cap-num">03</div>
+      <div class="cap-title">Where things go wrong</div>
+      <p class="cap-desc">Proactive red flag surfacing, dangerous mimics, diagnostic pitfalls, and common clinical errors for the presentation.</p>
+      <span class="cap-tag">Safety layer</span>
+    </div>
+    <div class="cap-item">
+      <div class="cap-num">04</div>
+      <div class="cap-title">Treatment planning</div>
+      <p class="cap-desc">Evidence-based treatment pathways, first-line and alternative options, dose considerations, and contraindication checks.</p>
+      <span class="cap-tag">Guidelines-grounded</span>
+    </div>
+    <div class="cap-item">
+      <div class="cap-num">05</div>
+      <div class="cap-title">Investigation guidance</div>
+      <p class="cap-desc">Which tests to order, in what sequence, and how results will narrow or expand the differential — explained clearly.</p>
+      <span class="cap-tag">Ordered reasoning</span>
+    </div>
+    <div class="cap-item">
+      <div class="cap-num">06</div>
+      <div class="cap-title">Reasoning transparency</div>
+      <p class="cap-desc">Every output shows its work — which findings drove which conclusions. No black box. Full clinical traceability.</p>
+      <span class="cap-tag">Explainable AI</span>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST -->
+<section class="trust-section" id="trust">
+  <div>
+    <div class="section-label">Trust & safety</div>
+    <h2 class="section-title">Built for<br>clinical reality</h2>
+    <p class="section-sub">MedAxis is designed for the accountability of medicine — transparent, traceable, and clear about what it is.</p>
+
+    <div class="trust-list">
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 18 18"><path d="M9 2l2 5h5l-4 3 1.5 5L9 12l-4.5 3L6 10 2 7h5z"/></svg>
+        </div>
+        <div>
+          <div class="trust-item-title">Clinician always decides</div>
+          <p class="trust-item-desc">MedAxis is a reasoning aid, not an autonomous system. Every output is an input to your clinical judgement — never a replacement for it.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 18 18"><rect x="3" y="3" width="12" height="12" rx="3"/><path d="M6 9h6M6 12h4"/></svg>
+        </div>
+        <div>
+          <div class="trust-item-title">Full reasoning trace</div>
+          <p class="trust-item-desc">Every diagnosis comes with the clinical logic behind it — which symptoms, findings, and risk factors drove the output.</p>
+        </div>
+      </div>
+      <div class="trust-item">
+        <div class="trust-icon">
+          <svg viewBox="0 0 18 18"><path d="M9 2a7 7 0 100 14A7 7 0 009 2z"/><path d="M9 8v4M9 6h.01"/></svg>
+        </div>
+        <div>
+          <div class="trust-item-title">Session-only data</div>
+          <p class="trust-item-desc">No patient data is stored. Each session is ephemeral — what you enter stays in the session and is not retained or used for training.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="compliance-card">
+      <div class="compliance-title">Compliance framework</div>
+      <div class="compliance-items">
+        <div class="comp-item">
+          <div class="comp-check"><svg viewBox="0 0 10 10"><path d="M2 5l2.5 2.5 3.5-4"/></svg></div>
+          HIPAA-aligned data handling
+        </div>
+        <div class="comp-item">
+          <div class="comp-check"><svg viewBox="0 0 10 10"><path d="M2 5l2.5 2.5 3.5-4"/></svg></div>
+          GDPR-compatible session model
+        </div>
+        <div class="comp-item">
+          <div class="comp-check"><svg viewBox="0 0 10 10"><path d="M2 5l2.5 2.5 3.5-4"/></svg></div>
+          Clinical decision support — not autonomous diagnosis
+        </div>
+        <div class="comp-item">
+          <div class="comp-check"><svg viewBox="0 0 10 10"><path d="M2 5l2.5 2.5 3.5-4"/></svg></div>
+          Access restricted to verified medical professionals
+        </div>
+        <div class="comp-item">
+          <div class="comp-check"><svg viewBox="0 0 10 10"><path d="M2 5l2.5 2.5 3.5-4"/></svg></div>
+          Full audit trail for every session
+        </div>
+        <div class="comp-item">
+          <div class="comp-check"><svg viewBox="0 0 10 10"><path d="M2 5l2.5 2.5 3.5-4"/></svg></div>
+          Built toward SaMD regulatory readiness
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 class="cta-title">Ready to think<br>faster, together?</h2>
+  <p class="cta-sub">Join the early access programme. Built exclusively for practising medical professionals.</p>
+  <div class="cta-actions">
+    <a href="#" class="btn-primary">Request early access</a>
+    <a href="#" class="btn-secondary">Talk to the team</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-brand">MedAxis</span>
+  <span class="footer-tagline">An ultimate medical companion</span>
+  <span class="footer-note">For medical professionals only · Not for patient use</span>
+</footer>
+
+</body>
+</html>
